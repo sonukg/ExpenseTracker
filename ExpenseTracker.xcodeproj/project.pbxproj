@@ -30,6 +30,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		41BBEAA72DF97D49001719CE /* Screenshots */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Screenshots;
+			sourceTree = "<group>";
+		};
 		41DD93AD2D47C773004186A0 /* ExpenseTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ExpenseTracker;
@@ -75,6 +80,7 @@
 		41DD93A22D47C773004186A0 = {
 			isa = PBXGroup;
 			children = (
+				41BBEAA72DF97D49001719CE /* Screenshots */,
 				41DD93AD2D47C773004186A0 /* ExpenseTracker */,
 				41DD93BE2D47C774004186A0 /* ExpenseTrackerTests */,
 				41DD93C82D47C774004186A0 /* ExpenseTrackerUITests */,
@@ -108,6 +114,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				41BBEAA72DF97D49001719CE /* Screenshots */,
 				41DD93AD2D47C773004186A0 /* ExpenseTracker */,
 			);
 			name = ExpenseTracker;

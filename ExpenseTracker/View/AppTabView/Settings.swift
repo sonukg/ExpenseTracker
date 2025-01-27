@@ -6,45 +6,85 @@
 //
 import SwiftUI
 
-// Enum for different themes
-enum Theme: String, CaseIterable, Identifiable {
-    case system = "System Default"
-    case light = "Light Mode"
-    case dark = "Dark Mode"
-
-    var id: String { self.rawValue }
-}
-
 struct Settings: View {
-    @AppStorage("isDarkMode") private var isDarkMode = false
-    @AppStorage("selectedTheme") private var selectedTheme: Theme = .system
-
+    @EnvironmentObject var transactionStore: TransactionStore
+    @EnvironmentObject var appTheme: AppTheme
+    @Environment(\.dismiss) var dismiss
+    @State private var showResetAlert = false
+    let colorThemes = ["purple", "orange", "blue", "green"]
     
-
-       var body: some View {
-           VStack(alignment: .leading, spacing: 10) {
-               Text("Settings") // Explicit title
-                   .font(.title)
-                   .bold()
-                   .padding(.leading)
-
-               Form {
-                   Section(header: Text("").font(.headline)) {
-                       Toggle("Dark Mode", isOn: $isDarkMode)
-                   }
-               }
-           }
-           .navigationBarTitleDisplayMode(.inline) // Ensures title shows
-           .preferredColorScheme(isDarkMode ? .dark : .light)
-           
-              
-       }
-    
-              
+    var body: some View {
+        ZStack {
+            Color(red: 243/255, green: 236/255, blue: 255/255).ignoresSafeArea()
+            VStack(spacing: 24) {
+                // Custom Top Bar with Back Arrow
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.left")
+                            .font(.title2.bold())
+                            .foregroundColor(appTheme.accentColor)
+                    }
+                    Spacer()
+                    Text("Settings")
+                        .font(.title2.bold())
+                    Spacer().frame(width: 32) // To balance the back arrow
+                }
+                .padding(.top, 24)
+                .padding(.horizontal)
+                VStack(spacing: 16) {
+                    // Dark Mode Toggle
+                    HStack {
+                        Image(systemName: "moon.fill")
+                            .foregroundColor(appTheme.accentColor)
+                        Toggle("Dark Mode", isOn: $appTheme.isDarkMode)
+                            .toggleStyle(SwitchToggleStyle(tint: appTheme.accentColor))
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(14)
+                    // Theme Picker
+                    HStack {
+                        Image(systemName: "paintpalette.fill")
+                            .foregroundColor(appTheme.accentColor)
+                        Text("Theme Color")
+                        Spacer()
+                        Picker("Theme", selection: $appTheme.selectedColor) {
+                            ForEach(colorThemes, id: \.self) { theme in
+                                Text(theme.capitalized).tag(theme)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(14)
+                    // Reset Data
+                    Button(action: { showResetAlert = true }) {
+                        HStack {
+                            Image(systemName: "arrow.counterclockwise")
+                                .foregroundColor(.red)
+                            Text("Reset All Data")
+                                .foregroundColor(.red)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(14)
+                    }
+                    .alert(isPresented: $showResetAlert) {
+                        Alert(title: Text("Reset All Data?"), message: Text("This will delete all transactions."), primaryButton: .destructive(Text("Reset")) {
+                            transactionStore.transactions = []
+                        }, secondaryButton: .cancel())
+                    }
+                }
+                .padding(.horizontal)
+                Spacer()
+            }
+        }
+        .preferredColorScheme(appTheme.isDarkMode ? .dark : .light)
+    }
 }
-
-
 
 #Preview {
-    Settings()
+    Settings().environmentObject(TransactionStore()).environmentObject(AppTheme())
 }

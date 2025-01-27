@@ -12,7 +12,7 @@ enum BottomTab: String {
     case recents = "Recents"
     case charts = "Charts"
     case search = "Filter"
-    case settings = "Settings"
+    case goals = "Goals"
     
     
     @ViewBuilder
@@ -30,8 +30,8 @@ enum BottomTab: String {
         case .search:
             Image(systemName: "magnifyingglass")
             Text(self.rawValue)
-        case .settings:
-            Image(systemName: "gearshape")
+        case .goals:
+            Image(systemName: "target")
             Text(self.rawValue)
             
             

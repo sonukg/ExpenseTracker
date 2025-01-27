@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct Transaction: Identifiable {
+public struct Transaction: Identifiable, Codable {
     public var id: UUID = UUID()
     public var title: String
     public var remarks : String
@@ -29,4 +29,7 @@ public struct Transaction: Identifiable {
     var color: Color {
         return tints.first(where: { $0.color == tintColor})?.value ?? appTintColor
     }
+    
+    // Sample for previews
+    static let sample = Transaction(title: "Sample", remarks: "Sample remarks", amount: 100, dateAdded: Date(), category: .expense, tintColor: .init(color: "blue"))
 }
