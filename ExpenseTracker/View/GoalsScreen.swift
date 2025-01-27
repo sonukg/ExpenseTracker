@@ -113,24 +113,53 @@ struct AddGoalView: View {
     @State private var targetAmount = ""
     @State private var deadline = Date().addingTimeInterval(60*60*24*30)
     var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Goal Details")) {
+        ZStack {
+            Color(red: 243/255, green: 236/255, blue: 255/255).ignoresSafeArea()
+            VStack(spacing: 20) {
+                // Top Bar
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "xmark")
+                            .font(.title2.bold())
+                            .foregroundColor(.purple)
+                    }
+                    Spacer()
+                    Text("Add Goal")
+                        .font(.title2.bold())
+                    Spacer().frame(width: 32)
+                }
+                .padding(.top, 24)
+                .padding(.horizontal)
+                // Card-style form
+                VStack(spacing: 16) {
                     TextField("Title", text: $title)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
                     TextField("Target Amount", text: $targetAmount)
                         .keyboardType(.decimalPad)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
                     DatePicker("Deadline", selection: $deadline, displayedComponents: .date)
+                        .padding(.horizontal)
+                    Button(action: saveGoal) {
+                        Text("Save")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.purple)
+                            .cornerRadius(12)
+                    }
+                    .disabled(title.isEmpty || Double(targetAmount) == nil)
                 }
-            }
-            .navigationTitle("Add Goal")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { saveGoal() }
-                        .disabled(title.isEmpty || Double(targetAmount) == nil)
-                }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(18)
+                .shadow(color: Color.black.opacity(0.04), radius: 4, x: 0, y: 2)
+                .padding(.horizontal)
+                Spacer()
             }
         }
     }
